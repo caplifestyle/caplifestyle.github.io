@@ -1,11 +1,12 @@
 body {
     margin: 20px auto;
+    height: 100%;
     width: 90%;
     font-family: "Yantramanav", "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
     font-weight: 300;
     color: #131337;
 }
-    
+
 .center {
     margin: 20px auto;
     width: 60%;
@@ -128,4 +129,10 @@ div .pub-full {
 
 .pub-info blockquote {
   text-align: justify;
+}
+
+tbody.bordered {
+    display:block;
+    border:20pt solid;
+    border-color: #F57D2F;
 }
