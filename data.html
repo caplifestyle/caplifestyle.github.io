@@ -3,13 +3,18 @@ layout: default
 title: Cap Dat
 ---
 
+<head>
+	<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+
 <div class="blurb">
   <table style="width:100%;">
     <tr style="height: 95%">
       <td>
 	<p style="font-size: 2em; line-height: 1.15em">
 	  Latest data from the Capsodo machine: 
-		<br> Kai 3mph kaeps
+		<br> 
+		<div id="tester" style="width:800px;height:600px;"></div>
 	</p>
       </td>
       <td style="width: 25%"><img src="images/arco.png" align="top" height=700px></td>
@@ -18,4 +23,115 @@ title: Cap Dat
 
 </div>
 
+<script>
+	Plotly.d3.csv("https://raw.githubusercontent.com/caplifestyle/caplifestyle.github.io/master/kaep_data.csv", function(err, rows){
 
+	    function unpack(rows, key) {
+	    return rows.map(function(row) { return row[key]; });
+	    }
+
+	    t = unpack(rows, 't');
+	    k2 = unpack(rows, 'kaeper1');
+	    k3 = unpack(rows, 'kaeper2');
+	    k1 = unpack(rows, 'kaeper0');
+
+	    x=0;
+	    while(x < t.length){
+		k1[x] = parseFloat(k1[x]).toFixed(3); 
+		k2[x] = parseFloat(k2[x]).toFixed(3); 
+		k3[x] = parseFloat(k3[x]).toFixed(3); 
+		x++
+	    }
+
+	    var trace1 = {
+		type: "scatter",
+		mode: "lines",
+		name: 'Kaeper 1',
+		x: t,
+		y: k1,
+		text: t.map((v, i) => '<b>Date:</b> ' + v + "<br>" + 
+			    "<b>Velocity: </b> " + k1[i] + ' m/s'),
+		line: {color: '#d7191c'},
+		hoverinfo: 'text',
+
+		}
+
+	    var trace2 = {
+		type: "scatter",
+		mode: "lines",
+		name: 'Kaeper 2',
+		x: t,
+		y: k2,
+		text: t.map((v, i) => '<b>Date:</b> ' + v + "<br>" + 
+			    "<b>Velocity: </b> " + k2[i] + ' m/s'),
+		line: {color: '#2b83ba'},
+		hoverinfo: 'text',
+		}
+
+	    var trace3 = {
+		type: "scatter",
+		mode: "lines",
+		name: 'Kaeper 3',
+		x: t,
+		y: k3,
+		text: t.map((v, i) => '<b>Date:</b> ' + v + "<br>" + 
+			    "<b>Velocity: </b> " + k3[i] + ' m/s'),
+		line: {color: '#abdda4'},
+		hoverinfo: 'text',
+		}
+
+	    var trace4 = {
+		x: k1,
+		type: 'histogram',
+		xaxis: 'x2',
+		yaxis: 'y2',
+		opacity: 0.5,
+		showlegend: false,
+		marker: {
+		    color: '#d7191c',
+		},
+		hoverinfo: 'y'
+	    };
+
+	    var trace5 = {
+		x: k2,
+		type: 'histogram',
+		xaxis: 'x2',
+		yaxis: 'y2',
+		opacity: 0.6,
+		showlegend: false,
+		marker: {
+		    color: '#2b83ba',
+		},
+		hoverinfo: 'y'
+	    };
+
+	    var trace6 = {
+		x: k3,
+		type: 'histogram',
+		xaxis: 'x2',
+		yaxis: 'y2',
+		opacity: 0.7,
+		showlegend: false,
+		marker: {
+		    color: '#abdda4',
+		},
+		hoverinfo: 'y'
+	    };
+
+
+	    var data = [trace1, trace2, trace3, trace4, trace5, trace6];
+
+	    var layout = {
+		title: 'Comparison Amongst Professional Kaepers', 
+		yaxis: {domain: [0, 0.45], title: 'Velocity (m/s)'},
+		xaxis2: {anchor: 'y2', title: 'Velocity (m/s)'},
+		yaxis2: {
+		    domain: [0.6, 1],
+		},
+		barmode: 'overlay',
+	    };
+
+	    Plotly.newPlot('tester', data, layout);
+	})
+</script>
